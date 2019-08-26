@@ -6,5 +6,5 @@
 module.exports = app => {
     const { controller, router } = app;
     router.get('/', controller.home.index);
-    router.get('/slack/message', controller.home.message);
+    router.get('/api/message', controller.home.message);
 };

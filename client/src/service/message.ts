@@ -5,7 +5,7 @@ export class MessageService {
         let response;
 
         try {
-            response = await fetch('/slack/message');
+            response = await fetch('/api/message');
         } catch (e) {
             throw new Error('Api error');
         }
