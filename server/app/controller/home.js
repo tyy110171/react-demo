@@ -7,8 +7,8 @@ class HomeController extends Controller {
         await ctx.render("index");
     }
     async message() {
-        await this.service.message;
-        this.ctx.body = { message: 'uuuuuu' };
+        const data = await this.service.message;
+        this.ctx.body = data;
     }
 }
 
