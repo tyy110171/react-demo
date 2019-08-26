@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "start": "umi dev && npm run cp",
-    "build": "umi build && npm run cp",
+    "build:local": "umi build",
+    "build": "npm run cp",
     "cp": "cp -r ./dist/ ../server/app/public",
     "test": "umi test",
     "lint:es": "eslint --ext .js src mock tests",
