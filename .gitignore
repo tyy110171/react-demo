@@ -1,18 +1,39 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+node_modules/
+build/
+coverage
+dist
+dev
+# build
+.temp
+.nyc_output
+# idea ignore
+.idea/
+*.ipr
+*.iml
+*.iws
+typings
+.lib
 
-# dependencies
-/node_modules
-/npm-debug.log*
-/yarn-error.log
-/yarn.lock
-/package-lock.json
+# eclipse ignore
+.settings/
+.project
+.classpath
 
-# production
-/dist
+# npm
+npm-debug.log
 
-# misc
+# system files
 .DS_Store
+/.vscode/
 
-# umi
-.umi
-.umi-production
+# python pyc
+*.pyc
+
+*.swp
+
+server/run/
+server/logs/
+server/app/public/
+server/app/types/
+#server/**/*.js
+server/**/*.js.map

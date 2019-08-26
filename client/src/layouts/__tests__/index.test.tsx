@@ -1,16 +1,16 @@
 import 'jest';
-import Index from '..';
+import BasicLayout from '../index';
 import React from 'react';
 import renderer, { ReactTestInstance, ReactTestRenderer } from 'react-test-renderer';
 
-
-describe('Page: index', () => {
+describe('Layout: BasicLayout', () => {
   it('Render correctly', () => {
-    const wrapper: ReactTestRenderer = renderer.create(<Index />);
+    const wrapper: ReactTestRenderer = renderer.create(<BasicLayout />);
     expect(wrapper.root.children.length).toBe(1);
     const outerLayer = wrapper.root.children[0] as ReactTestInstance;
     expect(outerLayer.type).toBe('div');
-    expect(outerLayer.children.length).toBe(2);
-    
+    const title = outerLayer.children[0] as ReactTestInstance;
+    expect(title.type).toBe('h1');
+    expect(title.children[0]).toBe('Yay! Welcome to umi!');
   });
 });

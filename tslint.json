@@ -1,0 +1,42 @@
+{
+    "defaultSeverity": "warning",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "linterOptions": {
+        "exclude": [
+            "node_modules/**",
+            "tests/**"
+        ]
+    },
+    "rules": {
+        "member-access": [
+            true,
+            "no-public"
+        ],
+        "quotemark": [true, "single"],
+        "no-consecutive-blank-lines": false,
+        "member-ordering": false,
+        "no-empty-interface": true,
+        "no-var-requires": true,
+        "only-arrow-functions": true,
+        "no-console": false,
+        "no-duplicate-super": true,
+        "no-shadowed-variable": true,
+        "no-string-literal": false,
+        "no-var-keyword": true,
+        "indent": [true, "spaces", 4],
+        "object-literal-sort-keys": false,
+        "jsdoc-format": false,
+        "ordered-imports": true,
+        "semicolon": [true, "always", "ignore-bound-class-methods"],
+        "variable-name": ["allow-leading-underscore", "ban-keywords"],
+        "no-unused-variable": true,
+        "trailing-comma": [false],
+        "arrow-parens": [true, "ban-single-arg-parens"],
+        "max-line-length": [false],
+        "interface-name": [true, "never-prefix"],
+        "no-empty": false,
+        "object-literal-key-quotes": false
+    }
+}
