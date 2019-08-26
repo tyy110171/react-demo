@@ -33,7 +33,6 @@ npm-debug.log
 
 server/run/
 server/logs/
-server/app/public/
 server/app/types/
 #server/**/*.js
 server/**/*.js.map
