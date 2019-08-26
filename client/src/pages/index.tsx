@@ -1,35 +1,46 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
+
 import styles from './index.css';
-import {MessageService} from "../service/message";
 
+function mapStateToProps(state) {
+    const { list} = state.messages;
+    return {
+        list
+    };
+}
 
-export default class MessageComponent extends Component {
+class MessageComponent extends Component {
+    messages = [{
+        message: '1'
+    }, {
+        message: '1'
+    }, {
+        message: '1'
+    }, {
+        message: '1'
+    }];
     constructor(props) {
         super(props)
-    }
 
-    componentDidMount() {
-        this.getMessage()
-    }
-
-    getMessage() {
-        MessageService.getMessage()
-            .then(resp => console.log(resp))
+        props.dispatch({
+            type: 'fetch'
+        });
+        // this.messages = props.list;
+        console.log(props.list)
     }
 
     render() {
         return (
             <div className={styles.normal}>
-                <div className={styles.welcome} />
                 <ul className={styles.list}>
-                    <li>To get started, edit <code>src/pages/index.js</code> and save to reload.</li>
-                    <li>
-                        <a href="https://umijs.org/guide/getting-started.html">
-                            Getting Started
-                        </a>
-                    </li>
+                    {this.messages.map((item, index) => {
+                        return <li className={styles.item} key={index}>{item.message}</li>
+                    })}
                 </ul>
             </div>
         );
     }
 }
+
+export default connect(mapStateToProps)(MessageComponent);
