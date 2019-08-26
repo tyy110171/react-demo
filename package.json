@@ -8,7 +8,7 @@
         "server-build": "cd server && npm run build",
         "h5-install": "cd client && npm install",
         "h5-build": "cd client && npm run build --prod",
-        "build": "npm run server-install && npm run h5-install",
+        "build": "npm run server-install",
         "release": "npm run build && cd build/react-demo && npm install --production",
         "start": "cd server && npm install --production && npm run start"
     },

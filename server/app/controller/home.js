@@ -6,9 +6,14 @@ class HomeController extends Controller {
         const { ctx } = this;
         await ctx.render("index");
     }
+
+    async slackMessage() {
+        const param = this.ctx.request.body;
+        this.ctx.messages = param;
+    }
+
     async message() {
-        const data = await this.service.message;
-        this.ctx.body = data;
+        this.ctx.body = this.ctx.messages;
     }
 }
 

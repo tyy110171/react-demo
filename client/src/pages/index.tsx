@@ -11,15 +11,7 @@ function mapStateToProps(state) {
 }
 
 class MessageComponent extends Component {
-    messages = [{
-        message: '1'
-    }, {
-        message: '1'
-    }, {
-        message: '1'
-    }, {
-        message: '1'
-    }];
+    messages = [];
     constructor(props) {
         super(props)
 
