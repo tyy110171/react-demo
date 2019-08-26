@@ -1,22 +1,21 @@
-import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
-import * as path from "path";
+/* eslint valid-jsdoc: "off" */
 
-export interface BizConfig {
-    view: any;
-    static: any;
-    security: any;
-}
+'use strict';
+const path = require("path");
 
-export type DefaultConfig = PowerPartial<EggAppConfig> & BizConfig;
+/**
+ * @param {Egg.EggAppInfo} appInfo app info
+ */
+module.exports = appInfo => {
+    /**
+     * built-in config
+     * @type {Egg.EggAppConfig}
+     **/
+    const config = {};
 
-export default (appInfo: EggAppInfo) => {
-    const config = {} as DefaultConfig;
-
-    // override config from framework / plugin
     // use for cookie sign key, should change to your own and keep security
-    config.keys = appInfo.name + '_1566791136564_4916';
+    config.keys = appInfo.name + '_1566829727882_802';
 
-    // add your egg config in here
     config.middleware = [];
 
     config.static = {
@@ -41,8 +40,7 @@ export default (appInfo: EggAppInfo) => {
         defaultExtension: ".html",
     };
 
-    // the return config will combines to EggAppConfig
     return {
-        ...config
+        ...config,
     };
 };

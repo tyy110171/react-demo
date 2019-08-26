@@ -1,7 +1,8 @@
-import { Service } from 'egg';
+"use strict";
+const { Service } = require('egg');
 
-export class MessageService extends Service {
-    public async message() {
+class MessageService extends Service {
+    async message() {
         const { ctx } = this;
         return await ctx.curl('https://appen-praise.herokuapp.com/slack/message', {
             method: 'GET',
@@ -9,3 +10,4 @@ export class MessageService extends Service {
         });
     }
 }
+module.exports = MessageService;

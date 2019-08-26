@@ -3,7 +3,7 @@
   "scripts": {
     "start": "umi dev && npm run cp",
     "build": "umi build && npm run cp",
-    "cp": "cp -r ./dist/ ../build/react-demo/app/public",
+    "cp": "cp -r ./dist/ ../server/app/public",
     "test": "umi test",
     "lint:es": "eslint --ext .js src mock tests",
     "lint:ts": "tslint \"src/**/*.ts\" \"src/**/*.tsx\"",
