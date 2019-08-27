@@ -1,6 +1,6 @@
 'use strict';
 const { Controller } = require('egg');
-const token = 'xoxp-725565328610-738973929255-737406408340-794b03709da2b7273c17dfac14ac5c0c';
+const token = 'xoxp-725565328610-738973929255-738622112676-cbaa91659957610eb63568fb8a188c7d';
 const userIdReg = /<@(.+)>/;
 
 class HomeController extends Controller {
