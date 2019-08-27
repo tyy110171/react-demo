@@ -3,12 +3,7 @@ import {MessageService} from "../service/message";
 export default {
     namespace: 'messages',
     state: {
-        list: [
-
-            {
-                massage: '11'
-            }
-        ]
+        list: []
     },
     reducers: {
         getMessage(state, { payload: { data: list} }) {
@@ -19,7 +14,7 @@ export default {
         *fetch({ call, put }) {
             const { data } = yield call(MessageService.getMessage);
             yield put({
-                type: 'save',
+                type: 'getMessage',
                 payload: {
                     data
                 },

@@ -11,22 +11,21 @@ function mapStateToProps(state) {
 }
 
 class MessageComponent extends Component {
-    messages = [];
+
     constructor(props) {
         super(props)
 
         props.dispatch({
             type: 'fetch'
         });
-        // this.messages = props.list;
-        console.log(props.list)
+
     }
 
     render() {
         return (
             <div className={styles.normal}>
                 <ul className={styles.list}>
-                    {this.messages.map((item, index) => {
+                    {this.props.list.map((item, index) => {
                         return <li className={styles.item} key={index}>{item.message}</li>
                     })}
                 </ul>
