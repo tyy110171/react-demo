@@ -44,7 +44,7 @@ class HomeController extends Controller {
                         token,
                         channel: channel_id,
                         user: mentionedId,
-                        text: 'Someone is mentioned you on APP luzpraise',
+                        text: 'Someone is mentioned you on APP praise',
                     },
                 }
             );
