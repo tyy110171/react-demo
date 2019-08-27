@@ -15,7 +15,6 @@ class HomeController extends Controller {
         const mentionMatch = (text || '').match(userIdReg);
         let profileImg32 = '';
         let displayName = '';
-
         if (mentionMatch) {
             const [ , mentionText ] = mentionMatch;
             const [ mentionedId ] = mentionText.split('|');
@@ -28,7 +27,6 @@ class HomeController extends Controller {
             );
 
             this.ctx.messages = text;
-
             const profile = profileResp.data.profile;
 
             profileImg32 = profile.image_32;

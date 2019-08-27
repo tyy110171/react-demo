@@ -1,4 +1,4 @@
-import {MessageService} from "../service/message";
+import * as MessageService from "../service/message";
 
 export default {
     namespace: 'messages',
@@ -6,7 +6,9 @@ export default {
         list: []
     },
     reducers: {
-        getMessage(state, { payload: { data: list} }) {
+        messages(state, { payload: { data: list} }) {
+            console.log(2)
+
             return { ...state, list };
         },
     },
@@ -14,9 +16,9 @@ export default {
         *fetch({ call, put }) {
             const { data } = yield call(MessageService.getMessage);
             yield put({
-                type: 'getMessage',
+                type: 'messages/messages',
                 payload: {
-                    data
+                    data: []
                 },
             });
         },

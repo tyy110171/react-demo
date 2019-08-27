@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import * as MessageService from "../service/message";
 
 import styles from './index.css';
 
@@ -16,9 +17,8 @@ class MessageComponent extends Component {
         super(props)
 
         props.dispatch({
-            type: 'fetch'
+            type: 'messages/fetch'
         });
-
     }
 
     render() {
