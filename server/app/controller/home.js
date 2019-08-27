@@ -10,6 +10,7 @@ class HomeController extends Controller {
     async slackMessage() {
         const param = this.ctx.request.body;
         this.ctx.messages = param;
+        this.ctx.status = 200;
     }
 
     async message() {
