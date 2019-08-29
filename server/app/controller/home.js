@@ -1,7 +1,7 @@
 'use strict';
 const { Controller } = require('egg');
 const userIdReg = /<@(.+)>/;
-let messages;
+
 class HomeController extends Controller {
     async index() {
         const { ctx } = this;
@@ -17,10 +17,8 @@ class HomeController extends Controller {
         let displayName = '';
 
         if (mentionMatch) {
-            const [ mentionMessage, mentionText ] = mentionMatch;
+            const [ , mentionText ] = mentionMatch;
             const [ mentionedId ] = mentionText.split('|');
-
-            const message = text.replace(mentionMessage, '');
 
             const profileResp = await this.ctx.curl(
                 `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
@@ -56,7 +54,7 @@ class HomeController extends Controller {
                     type: 'section',
                     text: {
                         type: 'mrkdwn',
-                        text: `*${channel_id}*, Your praise is received!`,
+                        text: `*${user_name}*, Your praise is received!`,
                     },
                 },
                 {
@@ -79,6 +77,8 @@ class HomeController extends Controller {
     async message() {
         const token = process.env.SLACK_TOKEN;
         const channel = process.env.CHANNEL;
+        // const token = 'xoxp-725565328610-738973929255-741284841190-04c8f2f12cacc2143190c647aa39bdc2';
+        // const channel = 'DMBKE04HG';
 
         const messageResp = await this.ctx.curl(
             `https://slack.com/api/im.history?token=${token}&channel=${channel}`,
@@ -88,13 +88,25 @@ class HomeController extends Controller {
             }
         );
 
-        if (messageResp && messageResp.messages) {
-            this.ctx.body = messageResp.messages.map(item => {
-                return {
-                    name: item.user,
-                    message: item.text
-                };
+        if (messageResp && messageResp.data && messageResp.data.messages) {
+            const messages = [];
+            messageResp.data.messages.forEach(item => {
+                if (item.text) {
+                    const mentionMatch = (item.text || '').match(userIdReg);
+                    if (mentionMatch) {
+                        const [ mentionMessage, mentionText] = mentionMatch;
+                        const [ , userName ] = mentionText.split('|');
+
+                        const message = item.text.replace(mentionMessage, '');
+                        messages.push({
+                            name: userName,
+                            message: message
+                        });
+                    }
+                }
             });
+
+            this.ctx.body = messages;
         } else {
             this.ctx.body = [];
         }
