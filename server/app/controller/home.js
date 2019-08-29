@@ -10,9 +10,11 @@ class HomeController extends Controller {
 
     async slackMessage() {
         const token = process.env.SLACK_TOKEN;
+        const app = process.env.APP;
         const { ctx } = this;
         const { text, user_name, channel_id } = ctx.request.body;
         const mentionMatch = (text || '').match(userIdReg);
+
         let profileImg32 = '';
         let displayName = '';
 
@@ -27,8 +29,8 @@ class HomeController extends Controller {
                     dataType: 'json',
                 }
             );
-            const profile = profileResp.data.profile;
 
+            const profile = profileResp.data.profile;
             profileImg32 = profile.image_32;
             displayName = profile.display_name_normalized;
 
@@ -41,7 +43,7 @@ class HomeController extends Controller {
                         token,
                         channel: channel_id,
                         user: mentionedId,
-                        text: 'Someone is mentioned you on APP praise',
+                        text: `Someone is mentioned you on APP *${app}*`,
                     },
                 }
             );
