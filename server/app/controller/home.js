@@ -77,6 +77,8 @@ class HomeController extends Controller {
     async message() {
         const token = process.env.SLACK_TOKEN;
         const channel = process.env.CHANNEL;
+        // const token = 'xoxp-725565328610-738973929255-741284841190-04c8f2f12cacc2143190c647aa39bdc2';
+        // const channel = 'DMBKE04HG';
 
         const messageResp = await this.ctx.curl(
             `https://slack.com/api/im.history?token=${token}&channel=${channel}`,
