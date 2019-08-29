@@ -12,7 +12,6 @@ class HomeController extends Controller {
         const token = process.env.SLACK_TOKEN;
         const { ctx } = this;
         const { text, user_name, channel_id } = ctx.request.body;
-        console.log(ctx.request.body)
         const mentionMatch = (text || '').match(userIdReg);
         let profileImg32 = '';
         let displayName = '';
@@ -20,16 +19,7 @@ class HomeController extends Controller {
             const [ , mentionText ] = mentionMatch;
             const [ mentionedId ] = mentionText.split('|');
 
-            let sessionMessage = ctx.session.message;
-
-            if (sessionMessage) {
-                sessionMessage.push({message: text});
-                ctx.session.message = sessionMessage;
-            } else {
-                ctx.session.message = [{message: text}];
-            }
-            messages = ctx.session.message;
-
+            ctx.app.messages = text;
             const profileResp = await this.ctx.curl(
                 `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
                 {
@@ -85,8 +75,8 @@ class HomeController extends Controller {
     }
 
     async message() {
-        if (messages) {
-            this.ctx.body = messages;
+        if (this.ctx.app.messages) {
+            this.ctx.body = this.ctx.app.messages;
         } else {
             this.ctx.body = [];
         }
