@@ -22,7 +22,8 @@
 }
 
 .item {
-    border: 1px solid #666;
+    border: 1px solid #eee;
+    padding: 10px;
     width: 200px;
     height: 150px;
     display: inline-block;

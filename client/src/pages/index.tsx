@@ -17,7 +17,10 @@ class MessageComponent extends Component {
         super(props)
 
         props.dispatch({
-            type: 'messages/fetch'
+            type: 'messages/fetch',
+            payload: {
+                list: []
+            }
         });
     }
 

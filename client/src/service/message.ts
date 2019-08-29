@@ -1,5 +1,11 @@
-import request from '../utils/request';
+import axios from 'axios';
 
-export function getMessage() {
-    return request('/api/message');
+export async function getMessage() {
+    let resp;
+    try {
+        resp = await axios.get('/api/message');
+        return {list: resp.data}
+    } catch (e) {
+        throw e;
+    }
 }

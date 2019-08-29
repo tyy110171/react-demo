@@ -6,22 +6,21 @@ export default {
         list: []
     },
     reducers: {
-        messages(state, { payload: { data: list} }) {
-            console.log(2)
-
-            return { ...state, list };
+        getMessages(state: any, action: any) {
+            return { ...state, ...action.payload};
         },
     },
     effects: {
-        *fetch({ call, put }) {
-            const { data } = yield call(MessageService.getMessage);
+        *fetch(_, { call, put }) {
+            const { list } = yield call(MessageService.getMessage);
+
             yield put({
-                type: 'messages/messages',
+                type: 'getMessages',
                 payload: {
-                    data: []
+                    list
                 },
             });
         },
-    }
-
+    },
+    subscriptions: {}
 }
