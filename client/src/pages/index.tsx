@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import * as MessageService from "../service/message";
-
+import { Button } from 'antd'
 import styles from './index.css';
 
 function mapStateToProps(state) {
@@ -12,11 +11,14 @@ function mapStateToProps(state) {
 }
 
 class MessageComponent extends Component {
-
+    // props;
     constructor(props) {
-        super(props)
+        super(props);
+        this.getData();
+    }
 
-        props.dispatch({
+    getData() {
+        this.props.dispatch({
             type: 'messages/fetch',
             payload: {
                 list: []
@@ -27,9 +29,24 @@ class MessageComponent extends Component {
     render() {
         return (
             <div className={styles.normal}>
+                <div className={styles.btn}>
+                    <Button onClick={this.getData.bind(this)}>刷新</Button>
+                </div>
                 <ul className={styles.list}>
                     {this.props.list.map((item, index) => {
-                        return <li className={styles.item} key={index}>{item.message}</li>
+                        return <li className={styles.item} key={index}>
+                            <div>
+                                channel: {item.channel}
+                            </div>
+
+                            <div>
+                                name: {item.name}
+                            </div>
+                            <div>
+                                message: {item.message}
+                            </div>
+
+                            </li>
                     })}
                 </ul>
             </div>

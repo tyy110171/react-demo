@@ -16,6 +16,10 @@ module.exports = appInfo => {
     // use for cookie sign key, should change to your own and keep security
     config.keys = appInfo.name + '_1566829727882_802';
 
+    config.session = {
+        key: 'DEMO_SESSION',
+    };
+
     config.middleware = [];
 
     config.static = {

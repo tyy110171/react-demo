@@ -15,11 +15,27 @@ class HomeController extends Controller {
         const mentionMatch = (text || '').match(userIdReg);
         let profileImg32 = '';
         let displayName = '';
+
         if (mentionMatch) {
-            const [ , mentionText ] = mentionMatch;
+            const [ mentionMessage, mentionText ] = mentionMatch;
             const [ mentionedId ] = mentionText.split('|');
 
-            ctx.app.messages = text;
+            const message = text.replace(mentionMessage, '');
+
+            if (messages) {
+                messages.push({
+                    message,
+                    name: user_name,
+                    channel: channel_id
+                });
+            } else {
+                messages = [{
+                    message,
+                    name: user_name,
+                    channel: channel_id
+                }];
+            }
+
             const profileResp = await this.ctx.curl(
                 `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
                 {
@@ -75,12 +91,14 @@ class HomeController extends Controller {
     }
 
     async message() {
-        if (this.ctx.app.messages) {
-            this.ctx.body = this.ctx.app.messages;
+        console.log(messages)
+        if (messages) {
+            this.ctx.body = messages;
         } else {
             this.ctx.body = [];
         }
-        this.ctx.status = 200;
+
+        // this.ctx.status = 200;
     }
 }
 
