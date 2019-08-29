@@ -22,10 +22,36 @@ class HomeController extends Controller {
 
             const message = text.replace(mentionMessage, '');
 
+            await this.ctx.curl(
+                `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
+                {
+                    method: 'GET',
+                    dataType: 'json',
+                }
+            );
+            const profile = profileResp.data.profile;
+
+            profileImg32 = profile.image_32;
+            displayName = profile.display_name_normalized;
+
+            await this.ctx.curl(
+                'https://slack.com/api/chat.postEphemeral',
+                {
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        token,
+                        channel: channel_id,
+                        user: mentionedId,
+                        text: 'Someone is mentioned you on APP praise',
+                    },
+                }
+            );
+
             if (messages) {
                 messages.push({
                     message,
-                    name: user_name + mentionedId,
+                    name: user_name + mentionedId + displayName,
                     channel: channel_id
                 });
             } else {
@@ -35,59 +61,33 @@ class HomeController extends Controller {
                     channel: channel_id
                 }];
             }
-
-            await this.ctx.curl(
-                `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
-                {
-                    method: 'GET',
-                    dataType: 'json',
-                }
-            );
-            // const profile = profileResp.data.profile;
-            //
-            // profileImg32 = profile.image_32;
-            // displayName = profile.display_name_normalized;
-
-            // await this.ctx.curl(
-            //     'https://slack.com/api/chat.postEphemeral',
-            //     {
-            //         method: 'POST',
-            //         dataType: 'json',
-            //         data: {
-            //             token,
-            //             channel: channel_id,
-            //             user: mentionedId,
-            //             text: 'Someone is mentioned you on APP praise',
-            //         },
-            //     }
-            // );
         }
 
-        // ctx.body = {
-        //     response_type: 'in_channel',
-        //     blocks: [
-        //         {
-        //             type: 'section',
-        //             text: {
-        //                 type: 'mrkdwn',
-        //                 text: `*${user_name}*, Your praise is received!`,
-        //             },
-        //         },
-        //         {
-        //             type: 'section',
-        //             text: {
-        //                 type: 'mrkdwn',
-        //                 text: displayName,
-        //             },
-        //             accessory: {
-        //                 type: 'image',
-        //                 image_url: profileImg32,
-        //                 alt_text: 'avatar',
-        //             },
-        //         },
-        //     ],
-        // };
-        // ctx.set('Content-Type', 'application/json');
+        ctx.body = {
+            response_type: 'in_channel',
+            blocks: [
+                {
+                    type: 'section',
+                    text: {
+                        type: 'mrkdwn',
+                        text: `*${user_name}*, Your praise is received!`,
+                    },
+                },
+                {
+                    type: 'section',
+                    text: {
+                        type: 'mrkdwn',
+                        text: displayName,
+                    },
+                    accessory: {
+                        type: 'image',
+                        image_url: profileImg32,
+                        alt_text: 'avatar',
+                    },
+                },
+            ],
+        };
+        ctx.set('Content-Type', 'application/json');
     }
 
     async message() {
