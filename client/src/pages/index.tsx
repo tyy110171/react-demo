@@ -36,10 +36,6 @@ class MessageComponent extends Component {
                     {this.props.list.map((item, index) => {
                         return <li className={styles.item} key={index}>
                             <div>
-                                channel: {item.channel}
-                            </div>
-
-                            <div>
                                 name: {item.name}
                             </div>
                             <div>

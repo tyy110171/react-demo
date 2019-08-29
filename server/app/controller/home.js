@@ -22,20 +22,6 @@ class HomeController extends Controller {
 
             const message = text.replace(mentionMessage, '');
 
-            if (messages) {
-                messages.push({
-                    message,
-                    name: user_name,
-                    channel: channel_id
-                });
-            } else {
-                messages = [{
-                    message,
-                    name: user_name,
-                    channel: channel_id
-                }];
-            }
-
             const profileResp = await this.ctx.curl(
                 `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
                 {
@@ -70,7 +56,7 @@ class HomeController extends Controller {
                     type: 'section',
                     text: {
                         type: 'mrkdwn',
-                        text: `*${user_name}*, Your praise is received!`,
+                        text: `*${channel_id}*, Your praise is received!`,
                     },
                 },
                 {
@@ -91,14 +77,27 @@ class HomeController extends Controller {
     }
 
     async message() {
-        console.log(messages)
-        if (messages) {
-            this.ctx.body = messages;
+        const token = process.env.SLACK_TOKEN;
+        const channel = process.env.CHANNEL;
+
+        const messageResp = await this.ctx.curl(
+            `https://slack.com/api/im.history?token=${token}&channel=${channel}`,
+            {
+                method: 'GET',
+                dataType: 'json',
+            }
+        );
+
+        if (messageResp && messageResp.messages) {
+            this.ctx.body = messageResp.messages.map(item => {
+                return {
+                    name: item.user,
+                    message: item.text
+                };
+            });
         } else {
             this.ctx.body = [];
         }
-
-        // this.ctx.status = 200;
     }
 }
 
