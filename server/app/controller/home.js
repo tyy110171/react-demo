@@ -22,6 +22,7 @@ class HomeController extends Controller {
             const [ , mentionText ] = mentionMatch;
             const [ mentionedId ] = mentionText.split('|');
 
+            ctx.logger.info('mentionedId %s; token %s; user_name %s; channel_id %s', mentionedId, token, user_name, channel_id);
             const profileResp = await this.ctx.curl(
                 `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
                 {
@@ -30,12 +31,16 @@ class HomeController extends Controller {
                 }
             );
 
+            ctx.logger.info('profileResp %j', profileResp);
+
+
             const profile = profileResp.data.profile;
 
             profileImg32 = profile.image_32;
             displayName = profile.display_name_normalized;
 
-            await this.ctx.curl(
+
+            const resp = await this.ctx.curl(
                 'https://slack.com/api/chat.postEphemeral',
                 {
                     method: 'POST',
@@ -48,6 +53,8 @@ class HomeController extends Controller {
                     },
                 }
             );
+
+            ctx.logger.info('resp %j', resp);
         }
 
         ctx.body = {
