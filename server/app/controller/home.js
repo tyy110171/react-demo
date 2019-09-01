@@ -23,38 +23,42 @@ class HomeController extends Controller {
             const [ mentionedId ] = mentionText.split('|');
 
             ctx.logger.info('mentionedId %s; token %s; user_name %s; channel_id %s', mentionedId, token, user_name, channel_id);
-            const profileResp = await this.ctx.curl(
-                `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
-                {
-                    method: 'GET',
-                    dataType: 'json',
-                }
-            );
+            try {
+               const profileResp = await this.ctx.curl(
+                   `https://slack.com/api/users.profile.get?token=${token}&user=${mentionedId}`,
+                   {
+                       method: 'GET',
+                       dataType: 'json',
+                   }
+               );
 
-            ctx.logger.info('profileResp %j', profileResp);
-
-
-            const profile = profileResp.data.profile;
-
-            profileImg32 = profile.image_32;
-            displayName = profile.display_name_normalized;
+                ctx.logger.info('profileResp %j', profileResp);
 
 
-            const resp = await this.ctx.curl(
-                'https://slack.com/api/chat.postEphemeral',
-                {
-                    method: 'POST',
-                    dataType: 'json',
-                    data: {
-                        token,
-                        channel: channel_id,
-                        user: mentionedId,
-                        text: 'Someone is mentioned you on APP praise',
-                    },
-                }
-            );
+                const profile = profileResp.data.profile;
 
-            ctx.logger.info('resp %j', resp);
+                profileImg32 = profile.image_32;
+                displayName = profile.display_name_normalized;
+
+
+                const resp = await this.ctx.curl(
+                    'https://slack.com/api/chat.postEphemeral',
+                    {
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {
+                            token,
+                            channel: channel_id,
+                            user: mentionedId,
+                            text: 'Someone is mentioned you on APP praise',
+                        },
+                    }
+                );
+
+                ctx.logger.info('resp %j', resp);
+            } catch (e) {
+                ctx.logger.error('error %j', e);
+            }
         }
 
         ctx.body = {
@@ -88,35 +92,43 @@ class HomeController extends Controller {
         const token = process.env.SLACK_TOKEN;
         const channel = process.env.CHANNEL;
 
-        const messageResp = await this.ctx.curl(
-            `https://slack.com/api/im.history?token=${token}&channel=${channel}`,
-            {
-                method: 'GET',
-                dataType: 'json',
-            }
-        );
-
-        if (messageResp && messageResp.data && messageResp.data.messages) {
-            const messages = [];
-            messageResp.data.messages.forEach(item => {
-                if (item.text) {
-                    const mentionMatch = (item.text || '').match(userIdReg);
-                    if (mentionMatch) {
-                        const [ mentionMessage, mentionText] = mentionMatch;
-                        const [ , userName ] = mentionText.split('|');
-
-                        const message = item.text.replace(mentionMessage, '');
-                        messages.push({
-                            name: userName,
-                            message: message
-                        });
-                    }
+        try {
+            const messageResp = await this.ctx.curl(
+                `https://slack.com/api/im.history?token=${token}&channel=${channel}`,
+                {
+                    method: 'GET',
+                    dataType: 'json',
                 }
-            });
+            );
 
-            this.ctx.body = messages;
-        } else {
-            this.ctx.body = [];
+            if (messageResp && messageResp.data && messageResp.data.messages) {
+                const messages = [];
+                messageResp.data.messages.forEach(item => {
+                    if (item.text) {
+                        const mentionMatch = (item.text || '').match(userIdReg);
+                        if (mentionMatch) {
+                            const [ mentionMessage, mentionText] = mentionMatch;
+                            const [ , userName ] = mentionText.split('|');
+
+                            const message = item.text.replace(mentionMessage, '');
+                            messages.push({
+                                name: userName,
+                                message: message
+                            });
+                        }
+                    }
+                });
+
+                this.ctx.body = messages;
+            } else {
+                this.ctx.body = [];
+            }
+        } catch (e) {
+            if (e.error) {
+                this.ctx.body = {error: e.error};
+            } else {
+                this.ctx.logger.error('error %j', e);
+            }
         }
     }
 }
